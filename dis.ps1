@@ -52,10 +52,10 @@ function make_clean
 function make_index
 {
 	Write-Host "==== MAKE INDEX" -ForeGroundColor Green
-	$TITLE="<h1>Документ сгенерирован: $DATE</h1>"
+	$TITLE="<h1>Р”РѕРєСѓРјРµРЅС‚ СЃРіРµРЅРµСЂРёСЂРѕРІР°РЅ: $DATE</h1>"
 	ConvertTo-HTML -head $STYLE -Body "$TITLE"|Out-File "$PATH\$INDEX"
-	ConvertTo-HTML -head $STYLE -Body "<strong>Количество компьютеров в домене:</strong> $PC_COUNT"|Out-File "$PATH\$INDEX" -Append
-	ConvertTo-HTML -head $STYLE -Body "<strong>Список:</strong><br>"|Out-File "$PATH\$INDEX" -Append
+	ConvertTo-HTML -head $STYLE -Body "<strong>РљРѕР»РёС‡РµСЃС‚РІРѕ РєРѕРјРїСЊСЋС‚РµСЂРѕРІ РІ РґРѕРјРµРЅРµ:</strong> $PC_COUNT"|Out-File "$PATH\$INDEX" -Append
+	ConvertTo-HTML -head $STYLE -Body "<strong>РЎРїРёСЃРѕРє:</strong><br>"|Out-File "$PATH\$INDEX" -Append
 	Get-ChildItem -Path $PATH\*.html|Select-Object Name|Where-Object {$_.Name -NotMatch "$INDEX"}|
 	%{"<a href=$($_.Name) target=_blank>$($_.Name)</a><br>"}|Out-File "$PATH\$INDEX" -Append
 }
@@ -80,55 +80,55 @@ function make_report
 					Write-Host "#### FOUND HOST: $FQDN" -ForeGroundColor Green
 					ConvertTo-HTML -head $STYLE -Body "<h2>[ <u>$FQDN</u> ]</h2>"|Out-File "$PATH\$FQDN.html" -Append
 					
-					ConvertTo-HTML -head $STYLE -Body "<strong>Пользователь:</strong>"|Out-File "$PATH\$FQDN.html" -Append
+					ConvertTo-HTML -head $STYLE -Body "<strong>РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ:</strong>"|Out-File "$PATH\$FQDN.html" -Append
 					Write-Host "[ DETECTING USERNAME ]"|
 					Get-WmiObject Win32_ComputerSystem -computername $FQDN|
-					Select-Object @{expression={$_.username}; label='Пользователь'}|
+					Select-Object @{expression={$_.username}; label='РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ'}|
 					ConvertTo-HTML -head $STYLE -As LIST|
 					Out-File "$PATH\$FQDN.html" -Append
 					
-					ConvertTo-HTML -head $STYLE -Body "<strong>Операционная система:</strong>"|Out-File "$PATH\$FQDN.html" -Append
+					ConvertTo-HTML -head $STYLE -Body "<strong>РћРїРµСЂР°С†РёРѕРЅРЅР°СЏ СЃРёСЃС‚РµРјР°:</strong>"|Out-File "$PATH\$FQDN.html" -Append
 					Write-Host "[ DETECTING OPERATING SYSTEM ]"|
 					Get-WmiObject Win32_OperatingSystem -computername $FQDN|
-					Select-Object @{expression={$_.CSname}; label='Сетевое имя'}, @{expression={$_.Caption}; label='Дистрибутив'}, @{expression={$_.Serialnumber}; label='Серийный номер'}|
+					Select-Object @{expression={$_.CSname}; label='РЎРµС‚РµРІРѕРµ РёРјСЏ'}, @{expression={$_.Caption}; label='Р”РёСЃС‚СЂРёР±СѓС‚РёРІ'}, @{expression={$_.Serialnumber}; label='РЎРµСЂРёР№РЅС‹Р№ РЅРѕРјРµСЂ'}|
 					ConvertTo-HTML -head $STYLE -As LIST|
 					Out-File "$PATH\$FQDN.html" -Append
 					
-					ConvertTo-HTML -head $STYLE -Body "<strong>Центральный процессор:</strong>"|Out-File "$PATH\$FQDN.html" -Append
+					ConvertTo-HTML -head $STYLE -Body "<strong>Р¦РµРЅС‚СЂР°Р»СЊРЅС‹Р№ РїСЂРѕС†РµСЃСЃРѕСЂ:</strong>"|Out-File "$PATH\$FQDN.html" -Append
 					Write-Host "[ DETECTING CENTRAL PROCESSOR UNIT ]"|Get-WmiObject CIM_Processor -computername $FQDN|
-					Select-Object @{expression={$_.Name}; label='Модель'}, @{expression={$_.SocketDesignation}; label='Сокет'}|
+					Select-Object @{expression={$_.Name}; label='РњРѕРґРµР»СЊ'}, @{expression={$_.SocketDesignation}; label='РЎРѕРєРµС‚'}|
 					ConvertTo-HTML -head $STYLE -As LIST|
 					Out-File "$PATH\$FQDN.html" -Append
 					
-					ConvertTo-HTML -head $STYLE -Body "<strong>Материнская плата:</strong>"|Out-File "$PATH\$FQDN.html" -Append
+					ConvertTo-HTML -head $STYLE -Body "<strong>РњР°С‚РµСЂРёРЅСЃРєР°СЏ РїР»Р°С‚Р°:</strong>"|Out-File "$PATH\$FQDN.html" -Append
 					Write-Host "[ DETECTING MOTHERBOARD AND RAM CAPACITY ]"|Get-WmiObject Win32_ComputerSystem -computername $FQDN| 
-					Select-Object @{expression={$_.Manufacturer}; label='Производитель'}, @{expression={$_.Model}; label='Модель'}, @{label='ОЗУ (ГБ)'; expression={"{0:N0}" -f ($_.TotalPhysicalMemory/1GB)}}, @{expression={$_.SystemType}; label='Архитектура'}|
+					Select-Object @{expression={$_.Manufacturer}; label='РџСЂРѕРёР·РІРѕРґРёС‚РµР»СЊ'}, @{expression={$_.Model}; label='РњРѕРґРµР»СЊ'}, @{label='РћР—РЈ (Р“Р‘)'; expression={"{0:N0}" -f ($_.TotalPhysicalMemory/1GB)}}, @{expression={$_.SystemType}; label='РђСЂС…РёС‚РµРєС‚СѓСЂР°'}|
 					ConvertTo-HTML -head $STYLE -As LIST|
 					Out-File "$PATH\$FQDN.html" -Append
 					
-					ConvertTo-HTML -head $STYLE -Body "<strong>Видеоконтроллер:</strong>"|Out-File "$PATH\$FQDN.html" -Append
+					ConvertTo-HTML -head $STYLE -Body "<strong>Р’РёРґРµРѕРєРѕРЅС‚СЂРѕР»Р»РµСЂ:</strong>"|Out-File "$PATH\$FQDN.html" -Append
 					Write-Host "[ DETECTING VIDEOCONTROLLER ]"|Get-WmiObject CIM_VideoController -computername $FQDN|
-					Select-Object @{expression={$_.Caption}; label='Видеоконтроллер'}|
+					Select-Object @{expression={$_.Caption}; label='Р’РёРґРµРѕРєРѕРЅС‚СЂРѕР»Р»РµСЂ'}|
 					ConvertTo-HTML -head $STYLE -As LIST|
 					Out-File "$PATH\$FQDN.html" -Append
 					
-					ConvertTo-HTML -head $STYLE -Body "<strong>Носители информации:</strong>"|Out-File "$PATH\$FQDN.html" -Append
+					ConvertTo-HTML -head $STYLE -Body "<strong>РќРѕСЃРёС‚РµР»Рё РёРЅС„РѕСЂРјР°С†РёРё:</strong>"|Out-File "$PATH\$FQDN.html" -Append
 					Write-Host "[ DETECTING HARD DRIVE AND CAPACITY ]"|Get-WmiObject CIM_DiskDrive -computername $FQDN|
-					Select-Object @{expression={$_.Model}; label='Устройство'}, @{label='Объем (ГБ)'; expression={"{0:N0}" -f ($_.Size/1GB)}}|
+					Select-Object @{expression={$_.Model}; label='РЈСЃС‚СЂРѕР№СЃС‚РІРѕ'}, @{label='РћР±СЉРµРј (Р“Р‘)'; expression={"{0:N0}" -f ($_.Size/1GB)}}|
 					ConvertTo-HTML -head $STYLE -As LIST|
 					Out-File "$PATH\$FQDN.html" -Append
 					
-					ConvertTo-HTML -head $STYLE -Body "<strong>Оперативное запоминающее устройство:</strong>"|Out-File "$PATH\$FQDN.html" -Append
+					ConvertTo-HTML -head $STYLE -Body "<strong>РћРїРµСЂР°С‚РёРІРЅРѕРµ Р·Р°РїРѕРјРёРЅР°СЋС‰РµРµ СѓСЃС‚СЂРѕР№СЃС‚РІРѕ:</strong>"|Out-File "$PATH\$FQDN.html" -Append
 					Write-Host "[ DETECTING MEMORY TYPE ]"
 					$MEM_TYPE = "DDR-3", "Other", "DRAM", "Synchronous DRAM", "Cache DRAM","EDO", "EDRAM", "VRAM", "SRAM", "RAM", "ROM", "Flash", "EEPROM", "FEPROM","EPROM", "CDRAM", "3DRAM", "SDRAM", "SGRAM", "RDRAM", "DDR-1", "DDR-2"
-					$COL1=@{Name='Тип памяти'; Expression={$MEM_TYPE[$_.MemoryType]}}
-					Get-WmiObject Win32_PhysicalMemory -computername $FQDN| Select-Object @{expression={$_.BankLabel}; label='Слот'},$COL1|
+					$COL1=@{Name='РўРёРї РїР°РјСЏС‚Рё'; Expression={$MEM_TYPE[$_.MemoryType]}}
+					Get-WmiObject Win32_PhysicalMemory -computername $FQDN| Select-Object @{expression={$_.BankLabel}; label='РЎР»РѕС‚'},$COL1|
 					ConvertTo-HTML -head $STYLE|
 					Out-File "$PATH\$FQDN.html" -Append
 					
-					ConvertTo-HTML -head $STYLE -Body "<strong>Список установленных программ:</strong>"|Out-File "$PATH\$FQDN.html" -Append
+					ConvertTo-HTML -head $STYLE -Body "<strong>РЎРїРёСЃРѕРє СѓСЃС‚Р°РЅРѕРІР»РµРЅРЅС‹С… РїСЂРѕРіСЂР°РјРј:</strong>"|Out-File "$PATH\$FQDN.html" -Append
 					Write-Host "[ PERFORMING LIST OF APPLICATIONS ]"|Get-WmiObject Win32_Product -computername $FQDN|Sort-Object Name|
-					Select-Object @{expression={$_.Name}; label='Наименование'}, @{expression={$_.Version}; label='Версия'}|
+					Select-Object @{expression={$_.Name}; label='РќР°РёРјРµРЅРѕРІР°РЅРёРµ'}, @{expression={$_.Version}; label='Р’РµСЂСЃРёСЏ'}|
 					ConvertTo-HTML -head $STYLE|
 					Out-File "$PATH\$FQDN.html" -Append
 				}
@@ -136,7 +136,7 @@ function make_report
 				{
 					Write-Host "[ RPC SERVER UNAVAILABLE OR UNIX-LIKE OPERATING SYSTEM ]" -ForeGroundColor Yellow
 					ConvertTo-HTML -head $STYLE -Body "<h2>[ <u>$FQDN</u> ]</h2>"|Out-File "$PATH\$FQDN.html"
-					ConvertTo-HTML -head $STYLE -Body "<strong>Сервер RPC не доступен или UNIX-like операционная система.<br><br>Можете уточнить у <a href=mailto:$ADMIN>системного администратора<a>.</strong>"|
+					ConvertTo-HTML -head $STYLE -Body "<strong>РЎРµСЂРІРµСЂ RPC РЅРµ РґРѕСЃС‚СѓРїРµРЅ РёР»Рё UNIX-like РѕРїРµСЂР°С†РёРѕРЅРЅР°СЏ СЃРёСЃС‚РµРјР°.<br><br>РњРѕР¶РµС‚Рµ СѓС‚РѕС‡РЅРёС‚СЊ Сѓ <a href=mailto:$ADMIN>СЃРёСЃС‚РµРјРЅРѕРіРѕ Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂР°<a>.</strong>"|
 					Out-File "$PATH\$FQDN.html" -Append
 				}
 			}
@@ -156,7 +156,7 @@ function make_force_report
 {
 	make_clean
 	make_log
-	ConvertTo-HTML -head $STYLE -Body "<center><strong><p>Идет генерация отчета!</p><p>Зайдите позже...</p></strong></center>"|Out-File "$PATH\$INDEX"
+	ConvertTo-HTML -head $STYLE -Body "<center><strong><p>РРґРµС‚ РіРµРЅРµСЂР°С†РёСЏ РѕС‚С‡РµС‚Р°!</p><p>Р—Р°Р№РґРёС‚Рµ РїРѕР·Р¶Рµ...</p></strong></center>"|Out-File "$PATH\$INDEX"
 	Write-Host "==== MAKE FORCE REPORT" -ForeGroundColor Green
 	foreach($FQDN in $LIST)
 	{
@@ -167,55 +167,55 @@ function make_force_report
 				Write-Host "#### ONLINE: $FQDN" -ForeGroundColor Green
 				ConvertTo-HTML -head $STYLE -Body "<h2>[ <u>$FQDN</u> ]</h2>"|Out-File "$PATH\$FQDN.html" -Append
 				
-				ConvertTo-HTML -head $STYLE -Body "<strong>Пользователь:</strong>"|Out-File "$PATH\$FQDN.html" -Append
+				ConvertTo-HTML -head $STYLE -Body "<strong>РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ:</strong>"|Out-File "$PATH\$FQDN.html" -Append
 				Write-Host "[ DETECTING USERNAME ]"|
 				Get-WmiObject Win32_ComputerSystem -computername $FQDN|
-				Select-Object @{expression={$_.username}; label='Пользователь'}|
+				Select-Object @{expression={$_.username}; label='РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ'}|
 				ConvertTo-HTML -head $STYLE -As LIST|
 				Out-File "$PATH\$FQDN.html" -Append
 				
-				ConvertTo-HTML -head $STYLE -Body "<strong>Операционная система:</strong>"|Out-File "$PATH\$FQDN.html" -Append
+				ConvertTo-HTML -head $STYLE -Body "<strong>РћРїРµСЂР°С†РёРѕРЅРЅР°СЏ СЃРёСЃС‚РµРјР°:</strong>"|Out-File "$PATH\$FQDN.html" -Append
 				Write-Host "[ DETECTING OPERATING SYSTEM ]"|
 				Get-WmiObject Win32_OperatingSystem -computername $FQDN|
-				Select-Object @{expression={$_.CSname}; label='Сетевое имя'}, @{expression={$_.Caption}; label='Дистрибутив'}, @{expression={$_.Serialnumber}; label='Серийный номер'}|
+				Select-Object @{expression={$_.CSname}; label='РЎРµС‚РµРІРѕРµ РёРјСЏ'}, @{expression={$_.Caption}; label='Р”РёСЃС‚СЂРёР±СѓС‚РёРІ'}, @{expression={$_.Serialnumber}; label='РЎРµСЂРёР№РЅС‹Р№ РЅРѕРјРµСЂ'}|
 				ConvertTo-HTML -head $STYLE -As LIST|
 				Out-File "$PATH\$FQDN.html" -Append
 				
-				ConvertTo-HTML -head $STYLE -Body "<strong>Центральный процессор:</strong>"|Out-File "$PATH\$FQDN.html" -Append
+				ConvertTo-HTML -head $STYLE -Body "<strong>Р¦РµРЅС‚СЂР°Р»СЊРЅС‹Р№ РїСЂРѕС†РµСЃСЃРѕСЂ:</strong>"|Out-File "$PATH\$FQDN.html" -Append
 				Write-Host "[ DETECTING CENTRAL PROCESSOR UNIT ]"|Get-WmiObject CIM_Processor -computername $FQDN|
-				Select-Object @{expression={$_.Name}; label='Модель'}, @{expression={$_.SocketDesignation}; label='Сокет'}|
+				Select-Object @{expression={$_.Name}; label='РњРѕРґРµР»СЊ'}, @{expression={$_.SocketDesignation}; label='РЎРѕРєРµС‚'}|
 				ConvertTo-HTML -head $STYLE -As LIST|
 				Out-File "$PATH\$FQDN.html" -Append
 				
-				ConvertTo-HTML -head $STYLE -Body "<strong>Материнская плата:</strong>"|Out-File "$PATH\$FQDN.html" -Append
+				ConvertTo-HTML -head $STYLE -Body "<strong>РњР°С‚РµСЂРёРЅСЃРєР°СЏ РїР»Р°С‚Р°:</strong>"|Out-File "$PATH\$FQDN.html" -Append
 				Write-Host "[ DETECTING MOTHERBOARD AND RAM CAPACITY ]"|Get-WmiObject Win32_ComputerSystem -computername $FQDN| 
-				Select-Object @{expression={$_.Manufacturer}; label='Производитель'}, @{expression={$_.Model}; label='Модель'}, @{label='ОЗУ (ГБ)'; expression={"{0:N0}" -f ($_.TotalPhysicalMemory/1GB)}}, @{expression={$_.SystemType}; label='Архитектура'}|
+				Select-Object @{expression={$_.Manufacturer}; label='РџСЂРѕРёР·РІРѕРґРёС‚РµР»СЊ'}, @{expression={$_.Model}; label='РњРѕРґРµР»СЊ'}, @{label='РћР—РЈ (Р“Р‘)'; expression={"{0:N0}" -f ($_.TotalPhysicalMemory/1GB)}}, @{expression={$_.SystemType}; label='РђСЂС…РёС‚РµРєС‚СѓСЂР°'}|
 				ConvertTo-HTML -head $STYLE -As LIST|
 				Out-File "$PATH\$FQDN.html" -Append
 				
-				ConvertTo-HTML -head $STYLE -Body "<strong>Видеоконтроллер:</strong>"|Out-File "$PATH\$FQDN.html" -Append
+				ConvertTo-HTML -head $STYLE -Body "<strong>Р’РёРґРµРѕРєРѕРЅС‚СЂРѕР»Р»РµСЂ:</strong>"|Out-File "$PATH\$FQDN.html" -Append
 				Write-Host "[ DETECTING VIDEOCONTROLLER ]"|Get-WmiObject CIM_VideoController -computername $FQDN|
-				Select-Object @{expression={$_.Caption}; label='Видеоконтроллер'}|
+				Select-Object @{expression={$_.Caption}; label='Р’РёРґРµРѕРєРѕРЅС‚СЂРѕР»Р»РµСЂ'}|
 				ConvertTo-HTML -head $STYLE -As LIST|
 				Out-File "$PATH\$FQDN.html" -Append
 				
-				ConvertTo-HTML -head $STYLE -Body "<strong>Носители информации:</strong>"|Out-File "$PATH\$FQDN.html" -Append
+				ConvertTo-HTML -head $STYLE -Body "<strong>РќРѕСЃРёС‚РµР»Рё РёРЅС„РѕСЂРјР°С†РёРё:</strong>"|Out-File "$PATH\$FQDN.html" -Append
 				Write-Host "[ DETECTING HARD DRIVE AND CAPACITY ]"|Get-WmiObject CIM_DiskDrive -computername $FQDN|
-				Select-Object @{expression={$_.Model}; label='Устройство'}, @{label='Объем (ГБ)'; expression={"{0:N0}" -f ($_.Size/1GB)}}|
+				Select-Object @{expression={$_.Model}; label='РЈСЃС‚СЂРѕР№СЃС‚РІРѕ'}, @{label='РћР±СЉРµРј (Р“Р‘)'; expression={"{0:N0}" -f ($_.Size/1GB)}}|
 				ConvertTo-HTML -head $STYLE -As LIST|
 				Out-File "$PATH\$FQDN.html" -Append
 				
-				ConvertTo-HTML -head $STYLE -Body "<strong>Оперативное запоминающее устройство:</strong>"|Out-File "$PATH\$FQDN.html" -Append
+				ConvertTo-HTML -head $STYLE -Body "<strong>РћРїРµСЂР°С‚РёРІРЅРѕРµ Р·Р°РїРѕРјРёРЅР°СЋС‰РµРµ СѓСЃС‚СЂРѕР№СЃС‚РІРѕ:</strong>"|Out-File "$PATH\$FQDN.html" -Append
 				Write-Host "[ DETECTING MEMORY TYPE ]"
 				$MEM_TYPE = "DDR-3", "Other", "DRAM", "Synchronous DRAM", "Cache DRAM","EDO", "EDRAM", "VRAM", "SRAM", "RAM", "ROM", "Flash", "EEPROM", "FEPROM","EPROM", "CDRAM", "3DRAM", "SDRAM", "SGRAM", "RDRAM", "DDR-1", "DDR-2"
-				$COL1=@{Name='Тип памяти'; Expression={$MEM_TYPE[$_.MemoryType]}}
-				Get-WmiObject Win32_PhysicalMemory -computername $FQDN| Select-Object @{expression={$_.BankLabel}; label='Слот'},$COL1|
+				$COL1=@{Name='РўРёРї РїР°РјСЏС‚Рё'; Expression={$MEM_TYPE[$_.MemoryType]}}
+				Get-WmiObject Win32_PhysicalMemory -computername $FQDN| Select-Object @{expression={$_.BankLabel}; label='РЎР»РѕС‚'},$COL1|
 				ConvertTo-HTML -head $STYLE|
 				Out-File "$PATH\$FQDN.html" -Append
 				
-				ConvertTo-HTML -head $STYLE -Body "<strong>Список установленных программ:</strong>"|Out-File "$PATH\$FQDN.html" -Append
+				ConvertTo-HTML -head $STYLE -Body "<strong>РЎРїРёСЃРѕРє СѓСЃС‚Р°РЅРѕРІР»РµРЅРЅС‹С… РїСЂРѕРіСЂР°РјРј:</strong>"|Out-File "$PATH\$FQDN.html" -Append
 				Write-Host "[ PERFORMING LIST OF APPLICATIONS ]"|Get-WmiObject Win32_Product -computername $FQDN|Sort-Object Name|
-				Select-Object @{expression={$_.Name}; label='Наименование'}, @{expression={$_.Version}; label='Версия'}|
+				Select-Object @{expression={$_.Name}; label='РќР°РёРјРµРЅРѕРІР°РЅРёРµ'}, @{expression={$_.Version}; label='Р’РµСЂСЃРёСЏ'}|
 				ConvertTo-HTML -head $STYLE|
 				Out-File "$PATH\$FQDN.html" -Append
 			}
@@ -223,13 +223,13 @@ function make_force_report
 			{
 				Write-Host "[ RPC SERVER UNAVAILABLE OR UNIX-LIKE OPERATING SYSTEM ]" -ForeGroundColor Yellow
 				ConvertTo-HTML -head $STYLE -Body "<h2>[ <u>$FQDN</u> ]</h2>"|Out-File "$PATH\$FQDN.html"
-				ConvertTo-HTML -head $STYLE -Body "<strong>Сервер RPC не доступен или UNIX-like операционная система.<br><br>Можете уточнить у <a href=mailto:$ADMIN>системного администратора<a>.</strong>"|
+				ConvertTo-HTML -head $STYLE -Body "<strong>РЎРµСЂРІРµСЂ RPC РЅРµ РґРѕСЃС‚СѓРїРµРЅ РёР»Рё UNIX-like РѕРїРµСЂР°С†РёРѕРЅРЅР°СЏ СЃРёСЃС‚РµРјР°.<br><br>РњРѕР¶РµС‚Рµ СѓС‚РѕС‡РЅРёС‚СЊ Сѓ <a href=mailto:$ADMIN>СЃРёСЃС‚РµРјРЅРѕРіРѕ Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂР°<a>.</strong>"|
 				Out-File "$PATH\$FQDN.html" -Append
 			}
 			Catch
 			{
 				Write "Error: $_.Exception" >>$PATH\$ERROR_LOG
-				if($SEND_MAIL -eq "1"){Send-MailMessage -From $MAILBOT -To $ADMIN -Subject "Ошибка при инвентаризации" -SmtpServer $SMTPSERVER -Body "$_.Exception" -Encoding $MAILENCODING}
+				if($SEND_MAIL -eq "1"){Send-MailMessage -From $MAILBOT -To $ADMIN -Subject "РћС€РёР±РєР° РїСЂРё РёРЅРІРµРЅС‚Р°СЂРёР·Р°С†РёРё" -SmtpServer $SMTPSERVER -Body "$_.Exception" -Encoding $MAILENCODING}
 			}
 		}
 		else
@@ -237,7 +237,7 @@ function make_force_report
 			Write-Host "#### OFFLINE: $FQDN" -ForeGroundColor Red
 			ConvertTo-HTML -head $STYLE -Body "<embed hidden=false></embed>"|Out-File "$PATH\$FQDN.html"
 			ConvertTo-HTML -head $STYLE -Body "<h2>[ <u>$FQDN</u> ]</h2>"|Out-File "$PATH\$FQDN.html"
-			ConvertTo-HTML -head $STYLE -Body "<strong>Не удалось подключиться к компьютеру.<br><br>Возможные причины:<br>-Выключен<br>-ICMP-пакеты блокируются firewall'ом<br>-Отключены службы COM<br>-Компьютер отключен от ЛВС<br>-Компьютер более не существует, но присутствует в списке компьютеров домена<br><br>Можете уточнить у <a href=mailto:$ADMIN>системного администратора<a>.</strong>"|
+			ConvertTo-HTML -head $STYLE -Body "<strong>РќРµ СѓРґР°Р»РѕСЃСЊ РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ Рє РєРѕРјРїСЊСЋС‚РµСЂСѓ.<br><br>Р’РѕР·РјРѕР¶РЅС‹Рµ РїСЂРёС‡РёРЅС‹:<br>-Р’С‹РєР»СЋС‡РµРЅ<br>-ICMP-РїР°РєРµС‚С‹ Р±Р»РѕРєРёСЂСѓСЋС‚СЃСЏ firewall'РѕРј<br>-РћС‚РєР»СЋС‡РµРЅС‹ СЃР»СѓР¶Р±С‹ COM<br>-РљРѕРјРїСЊСЋС‚РµСЂ РѕС‚РєР»СЋС‡РµРЅ РѕС‚ Р›Р’РЎ<br>-РљРѕРјРїСЊСЋС‚РµСЂ Р±РѕР»РµРµ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚, РЅРѕ РїСЂРёСЃСѓС‚СЃС‚РІСѓРµС‚ РІ СЃРїРёСЃРєРµ РєРѕРјРїСЊСЋС‚РµСЂРѕРІ РґРѕРјРµРЅР°<br><br>РњРѕР¶РµС‚Рµ СѓС‚РѕС‡РЅРёС‚СЊ Сѓ <a href=mailto:$ADMIN>СЃРёСЃС‚РµРјРЅРѕРіРѕ Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂР°<a>.</strong>"|
 			Out-File "$PATH\$FQDN.html" -Append
 		}
 	}

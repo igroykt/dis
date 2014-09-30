@@ -1,6 +1,3 @@
-dis
-===
-
 #Domain Inventory Script
 Скрипт для интвентаризации компьютеров в домене  
 powershell -F dis.ps1 force-script - для генерации ежемесячного отчета  

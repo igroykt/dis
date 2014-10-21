@@ -236,7 +236,7 @@ function make_force_report
 		{
 			Write-Host "#### OFFLINE: $FQDN" -ForeGroundColor Red
 			ConvertTo-HTML -head $STYLE -Body "<embed hidden=false></embed>"|Out-File "$PATH\$FQDN.html"
-			ConvertTo-HTML -head $STYLE -Body "<h2>[ <u>$FQDN</u> ]</h2>"|Out-File "$PATH\$FQDN.html"
+			ConvertTo-HTML -head $STYLE -Body "<h2>[ <u>$FQDN</u> ]</h2>"|Out-File "$PATH\$FQDN.html" -Append
 			ConvertTo-HTML -head $STYLE -Body "<strong>Не удалось подключиться к компьютеру.<br><br>Возможные причины:<br>-Выключен<br>-ICMP-пакеты блокируются firewall'ом<br>-Отключены службы COM<br>-Компьютер отключен от ЛВС<br>-Компьютер более не существует, но присутствует в списке компьютеров домена<br><br>Можете уточнить у <a href=mailto:$ADMIN>системного администратора<a>.</strong>"|
 			Out-File "$PATH\$FQDN.html" -Append
 		}

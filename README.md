@@ -19,6 +19,6 @@
 В индексном файле формируется список из FQDN компьютеров.  
   
 Варианты запуска через планировщик задач:  
-powershell -F "dis.ps1" force-report - для генерации ежемесячного отчета  
-powershell -F "dis.ps1" report - для ежедневного сбора информации о компьютерах в домене  
-powershell -F "dis.ps1" rotate - удаление данных
+powershell -F "X:\path\to\dis.ps1" force-report - для генерации ежемесячного отчета  
+powershell -F "X:\path\to\dis.ps1" report - для ежедневного сбора информации о компьютерах в домене  
+powershell -F "X:\path\to\dis.ps1" rotate - удаление данных
